@@ -1,13 +1,11 @@
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const corsOptions = require('./config/corsOptions');
-const dotenv = require('dotenv');
-const errorHandler = require('./middleware/errorHandler');
-const express = require('express');
-const { logger } = require('./middleware/logger');
-const path = require('path');
-const root = require('./routes/root');
-
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import corsOptions from './config/corsOptions.js';
+import dotenv from 'dotenv';
+import errorHandler from './middleware/errorHandler.js';
+import express from 'express';
+import { logger } from './middleware/logger.js';
+import root from './routes/root.js';
 
 dotenv.config();
 
@@ -25,7 +23,7 @@ app.use(cookieParser());
 
 app.use(cors(corsOptions));
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static('public'));
 
 app.use('/', root);
 

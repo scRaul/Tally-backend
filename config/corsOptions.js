@@ -1,6 +1,6 @@
 const allowedOrigins = ['http://localhost:3000/'];
 
-module.exports = {
+export default {
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
