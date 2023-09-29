@@ -2,9 +2,11 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import corsOptions from './config/corsOptions.js';
 import dotenv from 'dotenv';
+import dbConnection from './config/dbConnection.js'
 import errorHandler from './middleware/errorHandler.js';
 import express from 'express';
-import { logger } from './middleware/logger.js';
+import { logEvents, logger } from './middleware/logger.js';
+import mongoose from 'mongoose';
 import root from './routes/root.js';
 
 dotenv.config();
@@ -16,6 +18,8 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
     app.use(logger);
 }
+
+dbConnection();
 
 app.use(express.json());
 
@@ -39,4 +43,16 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connection.once('open', () => {
+    console.log('Tally connceted to database!');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
+mongoose.connection.on('error', (error) => {
+    console.error(error);
+
+    const file = 'dbError.log';
+    const message = `${error.no}: (${error.hostname}) ${error.syscall} ${error.code}\n`;
+
+    logEvents(message, file);
+});

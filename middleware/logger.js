@@ -9,7 +9,7 @@ const fsPromises = fs.promises;
 
 async function logEvents(message, fileName) {
     const date_time = format(new Date(), 'yyyyMMdd\th:mm a').toString();
-    const log_item = `${date_time}\t${uuid()}\t${message}`;
+    const log_item = `${date_time}\t${uuid()}\t${message}\n`;
 
     try {
         const file_path = path.join(__dirname, '..', 'logs');
